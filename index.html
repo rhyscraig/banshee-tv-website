@@ -167,7 +167,7 @@
             `;
 
             for (let year = currentYear; year >= currentYear - 120; year--) {
-                const filename = `${genre.name.toLowerCase()}_shows_${year}.json`;
+                const filename = `${genre.name.toLowerCase()}_tv_${year}.json`;
                 dropdownHtml += `
                     <a class="dropdown-item" href="${genre.dataUrl}/${year}/${filename}">${year}</a>
                 `;
