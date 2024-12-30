@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Banshee | Decent Movies Finder</title>
+  <title>Banshee TV | Decent TV Shows Finder</title>
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -46,13 +46,13 @@
 	<main>
   	<div class="container content">
 
-			<h1 class="visually-hidden">Banshee - Only Decent Movies</h1>
+			<h1 class="visually-hidden">Banshee - Only Decent TV shows</h1>
 
 			<div id="introsection" class="px-4 py-5 my-5 text-center">
 				<img class="d-block mx-auto mb-4" src="/Icon_banshee.png" alt="" width="172" height="157">
-				<h1 class="display-5 fw-bold">Banshee</h1>
+				<h1 class="display-5 fw-bold">Banshee TV Shows</h1>
 				<div class="col-lg-6 mx-auto">
-					<p class="lead mb-4">Banshee is a tool for finding good movies.  Select the genre and year from the menu to view all decent movies released that year.</p>
+					<p class="lead mb-4">Banshee is a tool for finding good TV shows.  Select the genre and year from the menu to view all decent TV shows released that year.</p>
 					<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 					</div>
 				</div>
@@ -116,7 +116,7 @@
 			<div class="row mt-4">
 				<div class="col">
 					<div class="table-responsive">
-						<table class="table table-striped table-bordered display" style="width:100%" id="movieTable">
+						<table class="table table-striped table-bordered display" style="width:100%" id="tvshowTable">
 							<thead>
 								<!-- Table headers will be dynamically generated -->
 							</thead>
@@ -149,7 +149,7 @@
         ];
 
         const currentYear = new Date().getFullYear();
-        let movieTable; // Declare movieTable variable in the global scope
+        let tvshowTable; // Declare tvshowTable variable in the global scope
 
         // Generate the genre dropdowns
         genres.forEach(genre => {
@@ -162,7 +162,7 @@
             `;
 
             for (let year = currentYear; year >= currentYear - 120; year--) {
-                const filename = `${genre.name.toLowerCase()}_movies_${year}.json`;
+                const filename = `${genre.name.toLowerCase()}_shows_${year}.json`;
                 dropdownHtml += `
                     <a class="dropdown-item" href="${genre.dataUrl}/${year}/${filename}">${year}</a>
                 `;
@@ -172,10 +172,10 @@
             $('.navbar-nav').append(dropdownHtml);
         });
 
-        // Function to display movie details in a table
+        // Function to display tvshow details in a table
         function displayMovieDetails(data) {
-            const tableHeaders = $('#movieTable thead');
-            const tableBody = $('#movieTable tbody');
+            const tableHeaders = $('#tvshowTable thead');
+            const tableBody = $('#tvshowTable tbody');
 
             // Clear existing table headers and body
             tableHeaders.empty();
@@ -200,58 +200,58 @@
             tableHeaders.append(headerRow);
 
             // Populate table body with JSON data
-            data.forEach(movie => {
+            data.forEach(tvshow => {
                 const row = $('<tr>');
                 headers.forEach(header => {
                     if (header === 'Poster Path') {
                         row.append(`
                           <td>
-                              <img src="https://image.tmdb.org/t/p/original/${movie[header]}"
+                              <img src="https://image.tmdb.org/t/p/original/${tvshow[header]}"
                                     class="img-fluid poster-image"
                                     style="max-width: 100px;"
-                                    data-poster="https://image.tmdb.org/t/p/original/${movie[header]}"
+                                    data-poster="https://image.tmdb.org/t/p/original/${tvshow[header]}"
                                     data-bs-toggle="modal"
                                     data-bs-target="#posterModal">
                           </td>
                         `);
                     } else if (header === 'Title') {
                         // Create a TMDB link for the title
-                        const movieTitleSlug = movie[header].replace(/\s+/g, '-').toLowerCase();
-                        const tmdbUrl = `https://www.themoviedb.org/movie/${movie['Id']}-${movieTitleSlug}`;
+                        const tvshowTitleSlug = tvshow[header].replace(/\s+/g, '-').toLowerCase();
+                        const tmdbUrl = `https://www.thetvshowdb.org/tvshow/${tvshow['Id']}-${tvshowTitleSlug}`;
                         
                         // Combine the title and the poster image in the same cell
                         row.append(`
                           <td>
                               <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                                  <img src="https://image.tmdb.org/t/p/original/${movie['Poster Path']}" 
+                                  <img src="https://image.tmdb.org/t/p/original/${tvshow['Poster Path']}" 
                                       class="img-fluid poster-image" 
                                       style="max-width: 100px; margin-bottom: 10px;" 
-                                      data-poster="https://image.tmdb.org/t/p/original/${movie['Poster Path']}" 
+                                      data-poster="https://image.tmdb.org/t/p/original/${tvshow['Poster Path']}" 
                                       data-bs-toggle="modal" 
                                       data-bs-target="#posterModal">
-                                  <a href="${tmdbUrl}" class="h5" target="_blank">${movie[header]}</a>
+                                  <a href="${tmdbUrl}" class="h5" target="_blank">${tvshow[header]}</a>
                               </div>
                           </td>
                         `);
                     } else if (header === 'Backdrop Path') {
                         row.append(`
                           <td>
-                            <img src="https://image.tmdb.org/t/p/original/${movie[header]}"
+                            <img src="https://image.tmdb.org/t/p/original/${tvshow[header]}"
                               class="img-fluid backdrop-image"
                               style="max-width: 100px;">
                           </td>
                         `);
                     }  else if(header==='Overview'){
-    const originalLanguage = movie['Original Language'];
-    const releaseDate = movie['Release Date'];
-    const genres = movie.Genres.split(','); // Assuming Genres is a comma-separated string
+    const originalLanguage = tvshow['Original Language'];
+    const releaseDate = tvshow['Release Date'];
+    const genres = tvshow.Genres.split(','); // Assuming Genres is a comma-separated string
     row.append(`<td>
         <a href="#" class="about-link btn btn-primary"
            data-bs-toggle="modal"
            data-bs-target="#overviewModal"
-           data-title="${movie['Title']}"
-           data-description="${movie['Overview']}"
-           data-backdrop="https://image.tmdb.org/t/p/original/${movie['Backdrop Path']}"
+           data-title="${tvshow['Title']}"
+           data-description="${tvshow['Overview']}"
+           data-backdrop="https://image.tmdb.org/t/p/original/${tvshow['Backdrop Path']}"
            data-language="${originalLanguage}"
            data-release="${releaseDate}"
            data-genre="${genres.join(',')}">  <!-- Join the array for passing -->
@@ -261,36 +261,36 @@
 
                     } else if (header === 'Trailer') {
                         row.append(`<td>
-                                        <a href="${movie[header]}" class="trailer-link btn btn-primary" data-trailer="${movie[header]}">Trailer</a>
+                                        <a href="${tvshow[header]}" class="trailer-link btn btn-primary" data-trailer="${tvshow[header]}">Trailer</a>
                                     </td>`);
                     } else if (header === 'Release Date') {
                       // Add a hidden input to hold the release date for later access
                       row.append(`
                           <td>
-                              <span class="badge rounded-pill bg-light text-dark">${movie[header]}</span>
-                              <input type="hidden" class="release-date" value="${movie[header]}"/>
+                              <span class="badge rounded-pill bg-light text-dark">${tvshow[header]}</span>
+                              <input type="hidden" class="release-date" value="${tvshow[header]}"/>
                           </td>
                       `);
                     } else if (header === 'Popularity') {
-                        row.append(`<td><span class="badge rounded-pill bg-dark border border-2">${movie[header]}</span></td>`);
+                        row.append(`<td><span class="badge rounded-pill bg-dark border border-2">${tvshow[header]}</span></td>`);
                     } else if (header === 'Vote Score') {
-                        row.append(`<td><span class="badge rounded-pill bg-dark border border-2">${movie[header]}</span></td>`);
+                        row.append(`<td><span class="badge rounded-pill bg-dark border border-2">${tvshow[header]}</span></td>`);
                     } else if (header === 'Banshee Score') {
-                        row.append(`<td><span class="badge rounded-pill bg-primary">${movie[header]}</span></td>`);
+                        row.append(`<td><span class="badge rounded-pill bg-primary">${tvshow[header]}</span></td>`);
                     } else {
-                        row.append(`<td>${movie[header]}</td>`);
+                        row.append(`<td>${tvshow[header]}</td>`);
                     }
                 });
                 tableBody.append(row);
             });
 
             // Destroy existing DataTable instance if it exists
-            if ($.fn.dataTable.isDataTable('#movieTable')) {
-                movieTable.destroy(); // Destroy the existing instance
+            if ($.fn.dataTable.isDataTable('#tvshowTable')) {
+                tvshowTable.destroy(); // Destroy the existing instance
             }
 
             // Initialize DataTables with sorting enabled and default sorting by Banshee Score descending
-            movieTable = $('#movieTable').DataTable({
+            tvshowTable = $('#tvshowTable').DataTable({
                 "order": [[ headers.indexOf("Banshee Score"), "desc" ]], // Default sorting by Banshee Score in descending order
                 "fixedHeader": true, // Enable fixed header
                 "responsive": true,
@@ -355,8 +355,8 @@
                 console.log("Data fetched successfully:", data); // Log the fetched data
                 
                 // Clear existing table before updating
-                if ($.fn.dataTable.isDataTable('#movieTable')) {
-                    $('#movieTable').DataTable().clear().destroy(); // Clear and destroy existing instance
+                if ($.fn.dataTable.isDataTable('#tvshowTable')) {
+                    $('#tvshowTable').DataTable().clear().destroy(); // Clear and destroy existing instance
                 }
                 
                 displayMovieDetails(data); // Display new data in the table
@@ -365,7 +365,7 @@
             })
             .fail(function(jqxhr, textStatus, error) {
                 console.error("Fetch error:", textStatus, error);
-                alert("Error fetching movie data. Please try again later.");
+                alert("Error fetching tvshow data. Please try again later.");
             });
         }
 
@@ -400,7 +400,7 @@
                 $('#trailerFrame').attr('src', ''); // Clear the iframe src to stop video
             });
 
-            // Event listener for dropdown item clicks to fetch movie data
+            // Event listener for dropdown item clicks to fetch tvshow data
             $('.navbar-nav').on('click', '.dropdown-item', function(event) {
                 event.preventDefault(); // Prevent the default action of the link
                 const url = $(this).attr('href'); // Get the URL from the clicked item
@@ -471,7 +471,7 @@
     <div class="container text-center">
       <hr class="hr hr-blurry" />
       <span>&copy; 2024 Banshee | Powered by
-        <a href="https://www.themoviedb.org/?language=en-GB" target="_blank" rel="noopener noreferrer" aria-label="Visit The Internet Movie Database (TMDB) in English">TMDB</a>.
+        <a href="https://www.thetvshowdb.org/?language=en-GB" target="_blank" rel="noopener noreferrer" aria-label="Visit The Internet Movie Database (TMDB) in English">TMDB</a>.
       </span>
     </div>
 	</footer>
